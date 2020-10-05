@@ -78,3 +78,6 @@ let g:ctrlp_custom_ignore = {
 			\ 'file': '\.exe$\|\.so$\|\.dll\|\.beam$\|\.DS_Store$'
 			\ }
 
+" netrw settings
+let g:netrw_banner = 0
+
