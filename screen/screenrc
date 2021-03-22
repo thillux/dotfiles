@@ -1,0 +1,14 @@
+###############
+# ~/.screenrc #
+###############
+
+startup_message  off
+vbell            off
+msgwait 	 1
+autodetach       on
+shelltitle   	 'bash'
+hardcopydir 	 $HOME
+defscrollback 	 10000
+defmonitor 	 on
+
+caption always "%{rw} %50>%{rW}%n%f %t" 

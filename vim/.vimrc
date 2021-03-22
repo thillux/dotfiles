@@ -1,90 +1,46 @@
-set nocompatible
+call plug#begin()
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'flazz/vim-colorschemes'
+Plug 'francoiscabrol/ranger.vim'
+call plug#end()
 
-" Enable syntax highlighting
-syntax on
-filetype plugin indent on
+filetype plugin on
+set omnifunc=syntaxcomplete#Complete
+autocmd CompleteDone * pclose
 
-set t_Co=256
-
-" Add line numbers
 set number
-set ruler
+syntax on
 
-" Set encoding
-set encoding=utf-8
+let mapleader=","
 
-" Whitespace stuff
-set nowrap
+set colorcolumn=81
+colorscheme molokai
+
 set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set softtabstop=0
 set noexpandtab
 
-" Show trailing spaces and highlight hard tabs
-set list listchars=tab:»·,space:·,trail:·
+set ruler
+set laststatus=2
+set showtabline=2
 
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+set list
 
-" Strip trailing whitespaces on each save
-fun! <SID>StripTrailingWhitespaces()
-	let l = line(".")
-	let c = col(".")
-	%s/\s\+$//e
-	call cursor(l, c)
-endfun
-autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+map <F2> :set tabstop=2<CR>
+map <F4> :set tabstop=4<CR>
+map <F5> :set list!<CR>
+map <F6> :set expandtab!<CR>
+map <F7> :set invnumber<CR>
+map <F8> :set tabstop=8<CR>
+map <F9> :FZF<CR>
+map <F10> :Rg<CR>
+map <F12> :set relativenumber!<CR>
 
-" Search related settings
-set incsearch
-set hlsearch
+nmap <leader><leader> :tab :term<CR>
+nmap <leader>t :tab :term<CR>
+nmap <leader>b :bnew<CR>
 
-" Map Ctrl+l to clear highlighted searches
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
-
-" Disable code folding
-set nofoldenable
-
-" make uses real tabs
-au FileType make set noexpandtab
-
-function! s:setupMarkup()
-	nnoremap <leader>p :silent !open -a Marked.app '%:p'<cr>
-endfunction
-
-" md, markdown, and mk are markdown and define buffer-local preview
-au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
-
-" add json syntax highlighting
-au BufNewFile,BufRead *.json set ft=javascript
-
-function! s:setupWrapping()
-	set wrap
-	set wrapmargin=2
-	set textwidth=80
-endfunction
-
-au BufRead,BufNewFile *.txt call s:setupWrapping()
-
-" make Python follow PEP8 ( http://www.python.org/dev/peps/pep-0008/ )
-au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
-" ctrp custom ignores
-let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\.git$\|\.hg$\|\.svn$\|\.eunit$',
-			\ 'file': '\.exe$\|\.so$\|\.dll\|\.beam$\|\.DS_Store$'
-			\ }
-
-" netrw settings
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 25
-augroup ProjectDrawer
-	autocmd!
-	autocmd VimEnter * :Vexplore
-augroup END
