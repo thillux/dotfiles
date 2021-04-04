@@ -4,11 +4,18 @@
 
 startup_message  off
 vbell            off
-msgwait 	 1
+msgwait          1
 autodetach       on
-shelltitle   	 'bash'
-hardcopydir 	 $HOME
-defscrollback 	 10000
-defmonitor 	 on
+hardcopydir      $HOME
+defscrollback    10000
+defmonitor       on
+term             screen-256color
+setenv           LC_CTYPE en_US.UTF-8
 
-caption always "%{rw} %50>%{rW}%n%f %t" 
+caption     always "%{ky} {%n%f} %{kg} %-Lw%{km}[%n%f %t]%{-}%+Lw%{kg} %=%{ky} %Y-%m-%d %c:%s "
+
+# navigate with CTRL+[Left|Right|Up|Down]
+bindkey "^[[1;5D" focus left
+bindkey "^[[1;5C" focus right
+bindkey "^[[1;5A" focus up
+bindkey "^[[1;5B" focus down
