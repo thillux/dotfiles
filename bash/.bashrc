@@ -1,6 +1,6 @@
-#
-# ~/.bashrc
-#
+#############
+# ~/.bashrc #
+#############
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -13,14 +13,44 @@ fi
 source ~/.bash_alias
 source ~/.bash_colors
 
-#[[ -e /usr/share/git/completion/git-completion.sh ]] && . /usr/share/git/completion/git-completion.sh
-#[[ -e /usr/share/git/completion/git-prompt.sh ]] && . /usr/share/git/completion/git-prompt.sh
+is_in_git_repo() {
+	git rev-parse --is-inside-work-tree
+}
 
-# Git bash prompt
-source /usr/share/git/completion/git-prompt.sh
-GIT_PS1_SHOWDIRTYSTATE=1
-GIT_PS1_SHOWSTASHSTATE=1
-GIT_PS1_SHOWUNTRACKEDFILES=1
-GIT_PS1_SHOWUPSTREAM=1
+parse_git_dirty_state() {
+	if [[ -n $(git status -s | grep -e "^A" -e "^M" -e "^D") ]]; then
+		echo -n "+"
+	fi
 
-export PS1='${COL_FG_YELLOW}>>$(tput sgr0) ${COL_FG_MAGENTA}\t \d$(tput sgr0) ${COL_FG_GREEN}[\u@\h]$(tput sgr0) ${COL_FG_BLUE}{\w}$(tput sgr0)$(__git_ps1 " ($(tput bold)${COL_FG_MAGENTA}%s$(tput sgr0))") ${COL_FG_YELLOW}$?$(tput sgr0) ${COL_FG_GREEN}$ $(tput sgr0)\n${COL_FG_CYAN}> \[$(tput sgr0)\]'
+	if [[ -n $(git status -s | grep -e "^\s*A" -e "^\s*M" -e "^\s*D") ]]; then
+		echo -n "*"
+	fi
+
+	if [[ -n $(git status -s | grep "^\s*??") ]]; then
+		echo -n "?"
+	fi
+}
+
+parse_git_branch() {
+	if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) ]]; then
+		echo -n " ($(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')$(parse_git_dirty_state))"
+	fi
+}
+
+print_return_code() {
+	if [[ "$1" == "0" ]]; then
+		echo -n "\\[${COL_BG_GREEN}${COL_FG_BLACK}\\]"
+	else
+		echo -n "\\[${COL_BG_RED}${COL_FG_BLACK}\\]"
+	fi
+}
+
+print_user_symbol() {
+	if [[ "$(whoami)" == "root" ]]; then
+		echo -n "#"
+	else
+		echo -n "$"
+	fi
+}
+
+export PS1="[\\[${TERM_RESET}${TERM_BOLD}\\]\u@\h \\[${COL_FG_GREEN}\\]\w\\[${COL_FG_MAGENTA}\\]\$(parse_git_branch)\\[${TERM_RESET}${TERM_BOLD}\\]] \\[${COL_FG_GREEN}${TERM_BOLD}\\]\$(print_user_symbol) \\[${COL_RESET}\\]"
