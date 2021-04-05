@@ -53,4 +53,4 @@ print_user_symbol() {
 	fi
 }
 
-export PS1="[\\[${TERM_RESET}${TERM_BOLD}\\]\u@\h \\[${COL_FG_GREEN}\\]\w\\[${COL_FG_MAGENTA}\\]\$(parse_git_branch)\\[${TERM_RESET}${TERM_BOLD}\\]] \\[${COL_FG_GREEN}${TERM_BOLD}\\]\$(print_user_symbol) \\[${COL_RESET}\\]"
+export PS1="[\\[${TERM_RESET}${TERM_BOLD}\\]\u@\h \\[${COL_FG_GREEN}\\]\w\\[${COL_FG_MAGENTA}\\]\$(parse_git_branch)\\[${TERM_RESET}${TERM_BOLD}\\]] \\[${COL_FG_GREEN}${TERM_BOLD}\\]\$(print_user_symbol) \\[${TERM_RESET}\\]"
